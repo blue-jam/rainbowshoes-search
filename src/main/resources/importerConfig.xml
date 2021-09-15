@@ -133,10 +133,10 @@
             <dom selector=".productName"
                  toField="product.name"
             />
-            <dom selector=".productTitleLink"
+            <dom selector=".productTitleLink:first-child"
                  toField="product.relatedWork"
             />
-            <dom selector=".productName, .productTitleLink"
+            <dom selector=".productName, .productTitleLink, .freeEdit.productDetail"
                  toField="product.description"
             />
             <dom selector=".btAddCart.btCartIn"
@@ -165,7 +165,7 @@
             </replace>
         </tagger>
         <tagger class="com.norconex.importer.handler.tagger.impl.KeepOnlyTagger">
-            <fields>document.reference, onSale, endOfSale, outOfStock</fields>
+            <fields>document.reference</fields>
             <fieldsRegex>product\..*</fieldsRegex>
         </tagger>
         <transformer class="com.norconex.importer.handler.transformer.impl.SubstringTransformer"
