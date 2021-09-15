@@ -1,0 +1,175 @@
+<importer>
+    <preParseHandlers>
+        <!-- アソビストア -->
+        <filter class="com.norconex.importer.handler.filter.impl.RegexReferenceFilter"
+                onMatch="exclude">
+            <regex>\Ahttps:\/\/shop\.asobistore\.jp\/product\/catalog\/.*</regex>
+        </filter>
+        <tagger class="com.norconex.importer.handler.tagger.impl.DOMTagger"
+                parser="html"
+        >
+            <restrictTo
+                    caseSensitive="false"
+                    field="document.reference"
+            >
+                \Ahttps:\/\/shop\.asobistore\.jp\/products\/detail\/.*\z
+            </restrictTo>
+            <dom selector="img[alt='アソビストア']"
+                 extract="attr(alt)"
+                 toField="product.store"
+            />
+            <dom selector=".box02_r h1"
+                 toField="product.name"
+            />
+            <dom selector="#panInner a:last-child"
+                 toField="product.relatedWork"
+            />
+            <dom selector="#panInner, .box02_r h1, #spec_size, #spec_size + .free_html"
+                 toField="product.description"
+            />
+            <dom selector="#addcartBtn"
+                 extract="tagName"
+                 toField="onSale"
+            />
+            <dom selector=".imgicon[alt='販売終了']"
+                 extract="tagName"
+                 toField="endOfSale"
+            />
+            <dom selector=".imgicon[alt='在庫切れ']"
+                 extract="tagName"
+                 toField="outOfStock"
+            />
+        </tagger>
+        <!-- コトブキヤオンラインショップ -->
+        <filter class="com.norconex.importer.handler.filter.impl.RegexReferenceFilter"
+                onMatch="exclude">
+            <regex>\Ahttps:\/\/shop\.kotobukiya\.co\.jp\/shop\/e\/.*</regex>
+        </filter>
+        <tagger class="com.norconex.importer.handler.tagger.impl.DOMTagger"
+                parser="html"
+        >
+            <restrictTo
+                    caseSensitive="false"
+                    field="document.reference"
+            >
+                \Ahttps:\/\/shop\.kotobukiya\.co\.jp\/shop\/g\/.*\z
+            </restrictTo>
+            <dom selector="img[alt='KOTOBUKIYA ONLINE SHOP']"
+                 extract="attr(alt)"
+                 toField="product.store"
+            />
+            <dom selector=".goods_name_"
+                 toField="product.name"
+            />
+            <dom selector=".goods_about p a"
+                 toField="product.relatedWork"
+            />
+            <dom selector=".goods_name_, .goods_about p a, .goods_info, .goods_explain"
+                 toField="product.description"
+            />
+            <dom selector="#cart_in"
+                 extract="tagName"
+                 toField="onSale"
+            />
+            <dom selector="#nostock"
+                 extract="tagName"
+                 toField="outOfStock"
+            />
+        </tagger>
+        <!-- AMNIBUS -->
+        <filter class="com.norconex.importer.handler.filter.impl.RegexReferenceFilter"
+                onMatch="exclude">
+            <regex>\Ahttps:\/\/amnibus\.com\/products\/list.*</regex>
+        </filter>
+        <tagger class="com.norconex.importer.handler.tagger.impl.DOMTagger"
+                parser="html"
+        >
+            <restrictTo
+                    caseSensitive="false"
+                    field="document.reference"
+            >
+                \Ahttps:\/\/amnibus\.com\/products\/detail\/.*\z
+            </restrictTo>
+            <dom selector="img[alt='AMNIBUS']"
+                 extract="attr(alt)"
+                 toField="product.store"
+            />
+            <dom selector=".detail-box h1"
+                 toField="product.name"
+            />
+            <dom selector=".detail-box cite"
+                 toField="product.relatedWork"
+            />
+            <dom selector=".detail-box h1, .detail-box cite, .detail-note"
+                 toField="product.description"
+            />
+            <dom selector=".detail-sale-status.is-stocked"
+                 extract="tagName"
+                 toField="onSale"
+            />
+            <dom selector=".detail-sale-status.is-finished"
+                 extract="tagName"
+                 toField="outOfStock"
+            />
+        </tagger>
+        <!-- SuperGroupies -->
+        <filter class="com.norconex.importer.handler.filter.impl.RegexReferenceFilter"
+                onMatch="exclude">
+            <regex>\Ahttps:\/\/www\.super-groupies\.com\/search.*</regex>
+        </filter>
+        <tagger class="com.norconex.importer.handler.tagger.impl.DOMTagger"
+                parser="html"
+        >
+            <restrictTo
+                    caseSensitive="false"
+                    field="document.reference"
+            >
+                \Ahttps:\/\/www\.super-groupies\.com\/product\/.*\z
+            </restrictTo>
+            <dom selector="img[alt='SuperGroupies']"
+                 extract="attr(alt)"
+                 toField="product.store"
+            />
+            <dom selector=".productName"
+                 toField="product.name"
+            />
+            <dom selector=".productTitleLink"
+                 toField="product.relatedWork"
+            />
+            <dom selector=".productName, .productTitleLink"
+                 toField="product.description"
+            />
+            <dom selector=".btAddCart.btCartIn"
+                 extract="tagName"
+                 toField="onSale"
+            />
+            <dom selector=".btAddCart.btDisabled"
+                 extract="tagName"
+                 toField="outOfStock"
+            />
+        </tagger>
+    </preParseHandlers>
+    <postParseHandlers>
+        <tagger class="com.norconex.importer.handler.tagger.impl.ReplaceTagger">
+            <replace fromField="onSale" toField="product.status" regex="true" wholeMatch="true">
+                <fromValue>.*</fromValue>
+                <toValue>ON_SALE</toValue>
+            </replace>
+            <replace fromField="endOfSale" toField="product.status" regex="true" wholeMatch="true">
+                <fromValue>.*</fromValue>
+                <toValue>END_OF_SALE</toValue>
+            </replace>
+            <replace fromField="outOfStock" toField="product.status" regex="true" wholeMatch="true">
+                <fromValue>.*</fromValue>
+                <toValue>OUT_OF_STOCK</toValue>
+            </replace>
+        </tagger>
+        <tagger class="com.norconex.importer.handler.tagger.impl.KeepOnlyTagger">
+            <fields>document.reference, onSale, endOfSale, outOfStock</fields>
+            <fieldsRegex>product\..*</fieldsRegex>
+        </tagger>
+        <transformer class="com.norconex.importer.handler.transformer.impl.SubstringTransformer"
+                     begin="0"
+                     end="1"/>
+    </postParseHandlers>
+</importer>

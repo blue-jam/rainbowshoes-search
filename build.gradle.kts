@@ -20,6 +20,15 @@ dependencies {
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+
+	implementation("org.apache.lucene:lucene-core:8.9.0")
+	implementation("org.apache.lucene:lucene-analyzers-kuromoji:8.9.0")
+
+	implementation("com.norconex.collectors:norconex-collector-http:2.9.0") {
+		exclude("edu.ucar", "jj2000")
+	}
+	implementation("edu.ucar:jj2000:5.2")
+
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }

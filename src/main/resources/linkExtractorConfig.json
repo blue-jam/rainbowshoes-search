@@ -1,0 +1,148 @@
+[
+  {
+    "host": "shop.asobistore.jp",
+    "pattern": "\\A(\\/product\\/catalog\\/s\\/|\\/category\\/).*\\z",
+    "linkSelectors": [
+      {
+        "cssSelector": ".image_only .product_name_area a",
+        "attribute": "href"
+      },
+      {
+        "cssSelector": ".number.border_top.clearfix a",
+        "attribute": "href"
+      }
+    ],
+    "comment": "Asobistore SERP"
+  },
+  {
+    "host": "shop.asobistore.jp",
+    "pattern": "\\A\\/products\\/detail\\/.*\\z",
+    "linkSelectors": [
+      {
+        "cssSelector": "select[name=ec_number] option",
+        "attribute": "data-fa0112-rel"
+      }
+    ],
+    "comment": "Asobistore Product page"
+  },
+  {
+    "host": "shop.kotobukiya.co.jp",
+    "pattern": "\\A\\/shop\\/e\\/.*\\z",
+    "linkSelectors": [
+      {
+        "cssSelector": ".tile_item a",
+        "attribute": "href"
+      },
+      {
+        "cssSelector": "a.page",
+        "attribute": "href"
+      }
+    ],
+    "comment": "Kotobukiya SERP"
+  },
+  {
+    "host": "amnibus.com",
+    "pattern": "\\A\\/products\\/list.*\\z",
+    "linkSelectors": [
+      {
+        "cssSelector": ".list-item li a",
+        "attribute": "href"
+      },
+      {
+        "cssSelector": ".list-pager li a",
+        "attribute": "href"
+      }
+    ],
+    "comment": "AMNIBUS SERP"
+  },
+  {
+    "host": "www.super-groupies.com",
+    "pattern": "\\A\\/search.*\\z",
+    "linkSelectors": [
+      {
+        "cssSelector": ".productFeedList .productFeed a",
+        "attribute": "href"
+      },
+      {
+        "cssSelector": ".pager a",
+        "attribute": "href"
+      }
+    ],
+    "comment": "Super Groupies SERP"
+  },
+  {
+    "host": "cospa.co.jp",
+    "pattern": "\\A\\/itemlist.*\\z",
+    "linkSelectors": [
+      {
+        "cssSelector": "#itemlist_main .itembox a",
+        "attribute": "href"
+      },
+      {
+        "cssSelector": "#result .pages a",
+        "attribute": "href"
+      }
+    ],
+    "comment": "COSPA SERP"
+  },
+  {
+    "host": "nijigencospa.com",
+    "pattern": "\\A\\/itemlist.*\\z",
+    "linkSelectors": [
+      {
+        "cssSelector": "#itemlist_main .itembox a",
+        "attribute": "href"
+      },
+      {
+        "cssSelector": "#result .pages a",
+        "attribute": "href"
+      }
+    ],
+    "comment": "二次元COSPA SERP"
+  },
+  {
+    "host": "www.cospa.com",
+    "pattern": "\\A\\/videsta\\/itemlist.*\\z",
+    "linkSelectors": [
+      {
+        "cssSelector": "#itemlist_main .itembox a",
+        "attribute": "href"
+      },
+      {
+        "cssSelector": "#result .pages a",
+        "attribute": "href"
+      }
+    ],
+    "comment": "VIDESTA SERP"
+  },
+  {
+    "host": "cospatio.com",
+    "pattern": "\\A\\/itemlist.*\\z",
+    "linkSelectors": [
+      {
+        "cssSelector": "#itemlist_main .itembox a",
+        "attribute": "href"
+      },
+      {
+        "cssSelector": "#result .pages a",
+        "attribute": "href"
+      }
+    ],
+    "comment": "COSPATIO SERP"
+  },
+  {
+    "host": "trantrip.com",
+    "pattern": "\\A\\/itemlist.*\\z",
+    "linkSelectors": [
+      {
+        "cssSelector": "#itemlist_main .itembox a",
+        "attribute": "href"
+      },
+      {
+        "cssSelector": "#result .pages a",
+        "attribute": "href"
+      }
+    ],
+    "comment": "TranTrip SERP"
+  }
+]
