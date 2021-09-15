@@ -14,7 +14,7 @@
             >
                 \Ahttps:\/\/shop\.asobistore\.jp\/products\/detail\/.*\z
             </restrictTo>
-            <dom selector="img[alt='アソビストア']"
+            <dom selector="header img[alt='アソビストア']"
                  extract="attr(alt)"
                  toField="product.store"
             />
@@ -54,7 +54,7 @@
             >
                 \Ahttps:\/\/shop\.kotobukiya\.co\.jp\/shop\/g\/.*\z
             </restrictTo>
-            <dom selector="img[alt='KOTOBUKIYA ONLINE SHOP']"
+            <dom selector="#header img[alt='KOTOBUKIYA ONLINE SHOP']"
                  extract="attr(alt)"
                  toField="product.store"
             />
