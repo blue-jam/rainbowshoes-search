@@ -140,12 +140,15 @@ class CrawlerConfig {
     }
 
     @Bean
-    fun jsonFileCommitter(): JSONFileCommitter {
+    fun jsonFileCommitter(
+        @Value("\${rainbowshoes.crawler.json.docsPerFile:1000}") docsPerFile: Int,
+        @Value("\${rainbowshoes.crawler.json.compress:true}") compress: Boolean
+    ): JSONFileCommitter {
         val committer = JSONFileCommitter()
 
         committer.directory = Paths.get("build", "json").toString()
-        committer.docsPerFile = 1000
-        committer.isCompress = false
+        committer.docsPerFile = docsPerFile
+        committer.isCompress = compress
 
         return committer
     }
