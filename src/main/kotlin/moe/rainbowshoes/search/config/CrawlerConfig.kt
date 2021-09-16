@@ -103,11 +103,6 @@ class CrawlerConfig {
     }
 
     @Bean
-    fun startCollector(collector: HttpCollector) = CommandLineRunner {
-        collector.start(true)
-    }
-
-    @Bean
     fun genericRecrawlableResolver(
         minFrequencies: Array<GenericRecrawlableResolver.MinFrequency>
     ): GenericRecrawlableResolver {
