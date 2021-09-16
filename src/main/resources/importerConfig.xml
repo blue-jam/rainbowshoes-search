@@ -3,7 +3,7 @@
         <!-- アソビストア -->
         <filter class="com.norconex.importer.handler.filter.impl.RegexReferenceFilter"
                 onMatch="exclude">
-            <regex>\Ahttps:\/\/shop\.asobistore\.jp\/product\/catalog\/.*</regex>
+            <regex>\Ahttps:\/\/shop\.asobistore\.jp\/product\/catalog\/.*\z</regex>
         </filter>
         <tagger class="com.norconex.importer.handler.tagger.impl.DOMTagger"
                 parser="html"
@@ -43,7 +43,7 @@
         <!-- コトブキヤオンラインショップ -->
         <filter class="com.norconex.importer.handler.filter.impl.RegexReferenceFilter"
                 onMatch="exclude">
-            <regex>\Ahttps:\/\/shop\.kotobukiya\.co\.jp\/shop\/e\/.*</regex>
+            <regex>\Ahttps:\/\/shop\.kotobukiya\.co\.jp\/shop\/e\/.*\z</regex>
         </filter>
         <tagger class="com.norconex.importer.handler.tagger.impl.DOMTagger"
                 parser="html"
@@ -79,7 +79,7 @@
         <!-- AMNIBUS -->
         <filter class="com.norconex.importer.handler.filter.impl.RegexReferenceFilter"
                 onMatch="exclude">
-            <regex>\Ahttps:\/\/amnibus\.com\/products\/list.*</regex>
+            <regex>\Ahttps:\/\/amnibus\.com\/products\/list.*\z</regex>
         </filter>
         <tagger class="com.norconex.importer.handler.tagger.impl.DOMTagger"
                 parser="html"
@@ -115,7 +115,7 @@
         <!-- SuperGroupies -->
         <filter class="com.norconex.importer.handler.filter.impl.RegexReferenceFilter"
                 onMatch="exclude">
-            <regex>\Ahttps:\/\/www\.super-groupies\.com\/search.*</regex>
+            <regex>\Ahttps:\/\/www\.super-groupies\.com\/search.*\z</regex>
         </filter>
         <tagger class="com.norconex.importer.handler.tagger.impl.DOMTagger"
                 parser="html"
@@ -148,6 +148,55 @@
                  toField="outOfStock"
             />
         </tagger>
+        <!-- PREMIUM BANDAI -->
+        <!-- PREMIUM BANDAI does not accept crawlers. sad. -->
+        <filter class="com.norconex.importer.handler.filter.impl.RegexReferenceFilter"
+                onMatch="exclude">
+            <regex>\Ahttps:\/\/p-bandai\.jp\/chara\/.*\z</regex>
+        </filter>
+        <tagger class="com.norconex.importer.handler.tagger.impl.DOMTagger"
+                parser="html"
+        >
+            <restrictTo
+                    caseSensitive="false"
+                    field="document.reference"
+            >
+                \Ahttps:\/\/p-bandai\.jp\/item\/.*\z
+            </restrictTo>
+            <dom selector="#pbHeader img[alt='プレミアムバンダイ']"
+                 extract="attr(alt)"
+                 toField="product.store"
+            />
+            <dom selector="#box.productsname"
+                 toField="product.name"
+            />
+            <dom selector="#cduWrap:first-child #cduPanNavi a:last-of-type"
+                 toField="product.relatedWork"
+            />
+            <dom selector="#box.productsname, #cduWrap:first-child #cduPanNavi a:last-of-type, table[summary='商品詳細']"
+                 toField="product.description"
+            />
+            <dom selector="[name='buy'][src$='button02.gif'], [name='buy'][src$='/button02_noselect.gif']"
+                 extract="tagName"
+                 toField="onSale"
+            />
+            <dom selector="[name='buy'][src$='/disable_cart.gif']"
+                 extract="tagName"
+                 toField="outOfStock"
+            />
+            <dom selector="[alt='販売終了しました']"
+                 extract="tagName"
+                 toField="endOfSale"
+            />
+            <dom selector="[name='buy'][src$='reserve_item.gif']"
+                 extract="tagName"
+                 toField="acceptingReservation"
+            />
+            <dom selector="[alt='予約終了しました']"
+                 extract="tagName"
+                 toField="reservationClosed"
+            />
+        </tagger>
     </preParseHandlers>
     <postParseHandlers>
         <tagger class="com.norconex.importer.handler.tagger.impl.ReplaceTagger">
@@ -162,6 +211,14 @@
             <replace fromField="outOfStock" toField="product.status" regex="true" wholeMatch="true">
                 <fromValue>.*</fromValue>
                 <toValue>OUT_OF_STOCK</toValue>
+            </replace>
+            <replace fromField="acceptingReservation" toField="product.status" regex="true" wholeMatch="true">
+                <fromValue>.*</fromValue>
+                <toValue>ACCEPTING_RESERVATION</toValue>
+            </replace>
+            <replace fromField="reservationClosed" toField="product.status" regex="true" wholeMatch="true">
+                <fromValue>.*</fromValue>
+                <toValue>RESERVATION_CLOSED</toValue>
             </replace>
         </tagger>
         <tagger class="com.norconex.importer.handler.tagger.impl.KeepOnlyTagger">

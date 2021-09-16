@@ -144,5 +144,49 @@
       }
     ],
     "comment": "TranTrip SERP"
+  },
+  {
+    "host": "p-bandai.jp",
+    "pattern": "\\A/chara\\/\\z",
+    "linkSelectors":[
+      {
+        "cssSelector": ".pbchara_result a",
+        "attribute": "href"
+      }
+    ],
+    "comment": "PREMIUM BANDAI character list page"
+  },
+  {
+    "host": "p-bandai.jp",
+    "pattern": "\\A/chara\\/[^\\/]*\\/\\z",
+    "linkSelectors":[
+      {
+        "cssSelector": ".pbchara_result a",
+        "attribute": "href"
+      }
+    ],
+    "comment": "PREMIUM BANDAI character page top (not include sold-out products)"
+  },
+  {
+    "host": "p-bandai.jp",
+    "pattern": "\\A/chara\\/[^\\/]*\\/\\z",
+    "linkSelectors":[
+      {
+        "cssSelector": ".sBox_salePeriod_20160229 a[href*='C5=all']",
+        "attribute": "href"
+      }
+    ],
+    "comment": "PREMIUM BANDAI character page top (not include sold-out products)"
+  },
+  {
+    "host": "p-bandai.jp",
+    "pattern": "\\A/chara\\/[^\\/]*\\/.*C5=all.*\\z",
+    "linkSelectors":[
+      {
+        "cssSelector": ".pbFluid-p-card-list .pbFluid-p-card__image a, .searchResultPager_20160229 a",
+        "attribute": "href"
+      }
+    ],
+    "comment": "PREMIUM BANDAI character page top (not include sold-out products)"
   }
 ]

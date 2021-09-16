@@ -42,7 +42,9 @@ class ConfigurableLinkExtractor(private val config: Config) : ILinkExtractor {
         }
 
         val urlObj = URL(url)
+        val localUrl = urlObj.path +
+            (if (urlObj.query == null) "" else urlObj.query)
 
-        return urlObj.host == config.host && pathMatcher.matcher(urlObj.path).find()
+        return urlObj.host == config.host && pathMatcher.matcher(localUrl).find()
     }
 }

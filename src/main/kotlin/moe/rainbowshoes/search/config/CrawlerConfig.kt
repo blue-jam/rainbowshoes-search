@@ -16,7 +16,6 @@ import com.norconex.committer.core.impl.JSONFileCommitter
 import com.norconex.committer.core.impl.MultiCommitter
 import com.norconex.importer.ImporterConfig
 import com.norconex.importer.handler.filter.OnMatch
-import com.norconex.importer.handler.tagger.impl.DOMTagger
 import moe.rainbowshoes.search.crawler.ConfigurableLinkExtractor
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.CommandLineRunner
