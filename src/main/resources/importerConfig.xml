@@ -24,7 +24,7 @@
             <dom selector="#panInner a:last-child"
                  toField="product.relatedWork"
             />
-            <dom selector="#panInner, .box02_r h1, #spec_size, #spec_size + .free_html"
+            <dom selector="#panInner, #spec_size, #spec_size + .free_html"
                  toField="product.description"
             />
             <dom selector="#addcartBtn"
@@ -64,7 +64,7 @@
             <dom selector=".goods_about p a"
                  toField="product.relatedWork"
             />
-            <dom selector=".goods_name_, .goods_about p a, .goods_info, .goods_explain"
+            <dom selector=".goods_info, .goods_explain"
                  toField="product.description"
             />
             <dom selector="#cart_in"
@@ -100,7 +100,7 @@
             <dom selector=".detail-box cite"
                  toField="product.relatedWork"
             />
-            <dom selector=".detail-box h1, .detail-box cite, .detail-note"
+            <dom selector=".detail-note"
                  toField="product.description"
             />
             <dom selector=".detail-sale-status.is-stocked"
@@ -136,7 +136,7 @@
             <dom selector=".productTitleLink:first-child"
                  toField="product.relatedWork"
             />
-            <dom selector=".productName, .productTitleLink, .freeEdit.productDetail"
+            <dom selector=".freeEdit.productDetail"
                  toField="product.description"
             />
             <dom selector=".btAddCart.btCartIn"
@@ -173,7 +173,7 @@
             <dom selector="#cduWrap:first-child #cduPanNavi a:last-of-type"
                  toField="product.relatedWork"
             />
-            <dom selector="#box.productsname, #cduWrap:first-child #cduPanNavi a:last-of-type, table[summary='商品詳細']"
+            <dom selector="table[summary='商品詳細']"
                  toField="product.description"
             />
             <dom selector="[name='buy'][src$='button02.gif'], [name='buy'][src$='/button02_noselect.gif']"
@@ -199,6 +199,12 @@
         </tagger>
     </preParseHandlers>
     <postParseHandlers>
+        <tagger class="com.norconex.importer.handler.tagger.impl.MergeTagger">
+            <merge toField="product.content" deleteFromFields="false"
+                   singleValue="true" singleValueSeparator="\n\n" >
+                <fromFields>product.name, product.relatedWork, product.description</fromFields>
+            </merge>
+        </tagger>
         <tagger class="com.norconex.importer.handler.tagger.impl.ReplaceTagger">
             <replace fromField="onSale" toField="product.status" regex="true" wholeMatch="true">
                 <fromValue>.*</fromValue>
