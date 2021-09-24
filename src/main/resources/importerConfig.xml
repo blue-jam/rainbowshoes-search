@@ -58,7 +58,7 @@
                  extract="attr(alt)"
                  toField="product.store"
             />
-            <dom selector=".goods_name_"
+            <dom selector="#gallery .goods_name_"
                  toField="product.name"
             />
             <dom selector=".goods_about p a"
@@ -149,7 +149,6 @@
             />
         </tagger>
         <!-- PREMIUM BANDAI -->
-        <!-- PREMIUM BANDAI does not accept crawlers. sad. -->
         <filter class="com.norconex.importer.handler.filter.impl.RegexReferenceFilter"
                 onMatch="exclude">
             <regex>\Ahttps:\/\/p-bandai\.jp\/chara\/.*\z</regex>
