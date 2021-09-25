@@ -3,9 +3,14 @@ package moe.rainbowshoes.search.controller
 import moe.rainbowshoes.search.index.IndexFields
 import moe.rainbowshoes.search.index.IndexReloader
 import moe.rainbowshoes.search.model.Product
+import org.apache.lucene.index.Term
 import org.apache.lucene.queryparser.classic.QueryParser
 import org.apache.lucene.queryparser.flexible.core.QueryNodeException
 import org.apache.lucene.queryparser.flexible.standard.StandardQueryParser
+import org.apache.lucene.search.BooleanClause
+import org.apache.lucene.search.BooleanQuery
+import org.apache.lucene.search.Query
+import org.apache.lucene.search.TermQuery
 import org.apache.lucene.search.TopScoreDocCollector
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
@@ -17,6 +22,10 @@ class SearchApiController(
     val indexReloader: IndexReloader,
     val queryParser: StandardQueryParser
 ) {
+    companion object {
+        val AVAILABLE_STATUS_LIST = listOf("ON_SALE", "ACCEPTING_RESERVATION", "UNKNOWN")
+    }
+
     data class Response(
         val products: List<Product>,
         val total: Long
@@ -25,19 +34,29 @@ class SearchApiController(
     @GetMapping("/api/search")
     @ResponseBody
     fun search(
-        @RequestParam(required = true, name = "q") queryString: String,
-        @RequestParam(required = true, name = "p", defaultValue = "0") page: Int,
-        @RequestParam(required = true, name = "n", defaultValue = "20") numPerPage: Int
+        @RequestParam(name = "q") queryString: String,
+        @RequestParam(name = "p", defaultValue = "0") page: Int,
+        @RequestParam(name = "n", defaultValue = "20") numPerPage: Int,
+        @RequestParam(name = "status", defaultValue = "") statusFilterName: String
     ): Response {
         val searcher = indexReloader.getCurrentSearcher()
-        val query = try {
+        val userQuery = try {
             queryParser.parse(queryString, IndexFields.CONTENT_FIELD)
         } catch (e: QueryNodeException) {
             queryParser.parse(QueryParser.escape(queryString), IndexFields.CONTENT_FIELD)
         }
 
+        val queryBuilder = BooleanQuery.Builder()
+            .add(userQuery, BooleanClause.Occur.MUST)
+
+        val statusFilterQuery = buildStatusFilter(statusFilterName)
+        statusFilterQuery?.run {
+            queryBuilder.add(statusFilterQuery, BooleanClause.Occur.FILTER)
+        }
+
         val collector = TopScoreDocCollector.create(numPerPage * (page + 1), 10000)
 
+        val query = queryBuilder.build()
         searcher.search(query, collector)
         val topDocs = collector.topDocs(page * numPerPage, numPerPage)
 
@@ -56,5 +75,25 @@ class SearchApiController(
             }
 
         return Response(products, topDocs.totalHits.value)
+    }
+
+    fun buildStatusFilter(
+        statusFilterName: String
+    ): Query? {
+        return when (statusFilterName) {
+            "ALL" -> null
+            else -> {
+                val builder = BooleanQuery.Builder()
+                    .setMinimumNumberShouldMatch(1)
+                AVAILABLE_STATUS_LIST.forEach { status ->
+                    builder.add(
+                        TermQuery(Term(IndexFields.STATUS_FIELD, status)),
+                        BooleanClause.Occur.SHOULD
+                    )
+                }
+
+                builder.build()
+            }
+        }
     }
 }
