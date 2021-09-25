@@ -2,6 +2,7 @@ package moe.rainbowshoes.search.crawler.committer
 
 import com.norconex.committer.core.ICommitter
 import com.norconex.commons.lang.map.Properties
+import moe.rainbowshoes.search.index.IndexReloader
 import org.apache.lucene.document.Document
 import org.apache.lucene.document.Field
 import org.apache.lucene.document.NumericDocValuesField
@@ -10,7 +11,6 @@ import org.apache.lucene.document.StringField
 import org.apache.lucene.document.TextField
 import org.apache.lucene.index.IndexWriter
 import org.apache.lucene.index.Term
-import org.apache.lucene.search.IndexSearcher
 import org.apache.lucene.search.TermQuery
 import org.springframework.stereotype.Component
 import java.io.InputStream
@@ -20,7 +20,7 @@ import javax.annotation.PreDestroy
 @Component
 class LuceneCommitter(
     private val indexWriter: IndexWriter,
-    private val indexSearcher: IndexSearcher,
+    private val indexReloader: IndexReloader,
     private val clock: Clock
 ) : ICommitter {
     companion object {
@@ -63,6 +63,7 @@ class LuceneCommitter(
 
         val urlTerm = Term(URL_FIELD, reference)
 
+        val indexSearcher = indexReloader.getCurrentSearcher()
         val hits = indexSearcher.search(TermQuery(urlTerm), 1).scoreDocs
 
         val document: Document

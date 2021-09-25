@@ -18,7 +18,6 @@ import com.norconex.importer.ImporterConfig
 import com.norconex.importer.handler.filter.OnMatch
 import moe.rainbowshoes.search.crawler.ConfigurableLinkExtractor
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.CommandLineRunner
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.io.ResourceLoader
@@ -135,7 +134,7 @@ class CrawlerConfig {
 
     @Bean
     fun jsonFileCommitter(
-        @Value("\${rainbowshoes.crawler.json.docsPerFile:1000}") docsPerFile: Int,
+        @Value("\${rainbowshoes.crawler.json.docsPerFile:10000}") docsPerFile: Int,
         @Value("\${rainbowshoes.crawler.json.compress:true}") compress: Boolean
     ): JSONFileCommitter {
         val committer = JSONFileCommitter()

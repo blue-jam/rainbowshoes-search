@@ -31,14 +31,4 @@ class LuceneConfig {
 
         return IndexWriter(directory, indexWriterConfig)
     }
-
-    @Bean
-    fun indexReader(
-        indexWriter: IndexWriter
-    ) = DirectoryReader.open(indexWriter)!!
-
-    @Bean
-    fun indexSearcher(
-        indexReader: IndexReader
-    ) = IndexSearcher(indexReader)
 }
