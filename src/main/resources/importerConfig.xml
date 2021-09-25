@@ -172,7 +172,7 @@
             <dom selector="#cduWrap:first-child #cduPanNavi a:last-of-type"
                  toField="product.relatedWork"
             />
-            <dom selector="table[summary='商品詳細']"
+            <dom selector="table[summary='商品詳細'], .details_txt"
                  toField="product.description"
             />
             <dom selector="[name='buy'][src$='button02.gif'], [name='buy'][src$='/button02_noselect.gif']"
