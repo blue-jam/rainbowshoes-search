@@ -7,4 +7,3 @@ data class Product(
     val status: String?,
     val createdAt: Long?
 )
-

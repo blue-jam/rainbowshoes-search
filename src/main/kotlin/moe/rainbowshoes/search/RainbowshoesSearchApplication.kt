@@ -9,10 +9,10 @@ import java.time.Clock
 @SpringBootApplication
 @EnableScheduling
 class RainbowshoesSearchApplication {
-	@Bean
-	fun clock() = Clock.systemUTC()!!
+    @Bean
+    fun clock() = Clock.systemUTC()!!
 }
 
 fun main(args: Array<String>) {
-	runApplication<RainbowshoesSearchApplication>(*args)
+    runApplication<RainbowshoesSearchApplication>(*args)
 }
