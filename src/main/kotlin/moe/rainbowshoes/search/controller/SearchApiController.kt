@@ -50,7 +50,8 @@ class SearchApiController(
                     doc.get(IndexFields.URL_FIELD),
                     doc.getValues(IndexFields.RELATED_WORK_FIELD).toList(),
                     doc.get(IndexFields.STATUS_FIELD),
-                    doc.get(IndexFields.CREATED_AT_STORED_FIELD)?.toLong()
+                    doc.get(IndexFields.CREATED_AT_STORED_FIELD)?.toLong(),
+                    doc.get(IndexFields.STORE_FIELD)
                 )
             }
 

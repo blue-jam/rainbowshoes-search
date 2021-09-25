@@ -5,5 +5,6 @@ data class Product(
     val url: String,
     val relatedWorks: List<String>,
     val status: String?,
-    val createdAt: Long?
+    val createdAt: Long?,
+    val store: String?
 )
