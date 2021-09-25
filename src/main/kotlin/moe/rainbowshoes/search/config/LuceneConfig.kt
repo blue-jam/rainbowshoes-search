@@ -1,12 +1,11 @@
 package moe.rainbowshoes.search.config
 
-import moe.rainbowshoes.search.index.IndexFields
 import org.apache.lucene.analysis.Analyzer
 import org.apache.lucene.analysis.ja.JapaneseAnalyzer
 import org.apache.lucene.index.IndexWriter
 import org.apache.lucene.index.IndexWriterConfig
-import org.apache.lucene.queryparser.classic.QueryParser
 import org.apache.lucene.queryparser.flexible.standard.StandardQueryParser
+import org.apache.lucene.queryparser.flexible.standard.config.StandardQueryConfigHandler
 import org.apache.lucene.store.Directory
 import org.apache.lucene.store.FSDirectory
 import org.springframework.context.annotation.Bean
@@ -35,5 +34,10 @@ class LuceneConfig {
     @Bean
     fun queryParser(
         analyzer: Analyzer
-    ) = StandardQueryParser(analyzer)
+    ): StandardQueryParser {
+        val parser = StandardQueryParser(analyzer)
+        parser.defaultOperator = StandardQueryConfigHandler.Operator.AND
+
+        return parser
+    }
 }
