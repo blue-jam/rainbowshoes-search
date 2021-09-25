@@ -1,5 +1,6 @@
 <importer>
     <preParseHandlers>
+        <transformer class="moe.rainbowshoes.search.crawler.importer.NfkcTransformer"/>
         <!-- アソビストア -->
         <filter class="com.norconex.importer.handler.filter.impl.RegexReferenceFilter"
                 onMatch="exclude">
@@ -200,7 +201,7 @@
     <postParseHandlers>
         <tagger class="com.norconex.importer.handler.tagger.impl.MergeTagger">
             <merge toField="product.content" deleteFromFields="false"
-                   singleValue="true" singleValueSeparator="\n\n" >
+                   singleValue="true" singleValueSeparator="\n\n">
                 <fromFields>product.name, product.relatedWork, product.description</fromFields>
             </merge>
         </tagger>
