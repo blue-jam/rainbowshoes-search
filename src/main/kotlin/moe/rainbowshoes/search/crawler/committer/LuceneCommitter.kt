@@ -2,6 +2,14 @@ package moe.rainbowshoes.search.crawler.committer
 
 import com.norconex.committer.core.ICommitter
 import com.norconex.commons.lang.map.Properties
+import moe.rainbowshoes.search.index.IndexFields.CONTENT_FIELD
+import moe.rainbowshoes.search.index.IndexFields.CREATED_AT_FIELD
+import moe.rainbowshoes.search.index.IndexFields.CREATED_AT_STORED_FIELD
+import moe.rainbowshoes.search.index.IndexFields.RELATED_WORK_FIELD
+import moe.rainbowshoes.search.index.IndexFields.STATUS_FIELD
+import moe.rainbowshoes.search.index.IndexFields.STORE_FIELD
+import moe.rainbowshoes.search.index.IndexFields.TITLE_FIELD
+import moe.rainbowshoes.search.index.IndexFields.URL_FIELD
 import moe.rainbowshoes.search.index.IndexReloader
 import org.apache.lucene.document.Document
 import org.apache.lucene.document.Field
@@ -23,17 +31,6 @@ class LuceneCommitter(
     private val indexReloader: IndexReloader,
     private val clock: Clock
 ) : ICommitter {
-    companion object {
-        const val URL_FIELD = "url"
-        const val STORE_FIELD = "store"
-        const val TITLE_FIELD = "title"
-        const val RELATED_WORK_FIELD = "relatedWork"
-        const val STATUS_FIELD = "status"
-        const val CONTENT_FIELD = "content"
-        const val CREATED_AT_FIELD = "createdAt"
-        const val CREATED_AT_STORED_FIELD = "createdAtStored"
-    }
-
     @PreDestroy
     fun destroy() {
         indexWriter.commit()

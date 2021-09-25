@@ -24,6 +24,7 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
 	implementation("org.apache.lucene:lucene-core:8.9.0")
+	implementation("org.apache.lucene:lucene-queryparser:8.9.0")
 	implementation("org.apache.lucene:lucene-analyzers-kuromoji:8.9.0")
 
 	implementation("com.norconex.collectors:norconex-collector-http:2.9.0") {
