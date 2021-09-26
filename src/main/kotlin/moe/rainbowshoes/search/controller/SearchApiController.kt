@@ -32,7 +32,7 @@ class SearchApiController(
         val total: Long
     )
 
-    @CrossOrigin(origins = ["localhost", "rainbowshoes.moe"])
+    @CrossOrigin(origins = ["http://localhost:8080", "https://rainbowshoes.moe"])
     @GetMapping("/api/search")
     @ResponseBody
     fun search(
