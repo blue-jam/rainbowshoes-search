@@ -1,13 +1,13 @@
 package moe.rainbowshoes.search.config
 
 import org.apache.lucene.analysis.Analyzer
-import org.apache.lucene.analysis.ja.JapaneseAnalyzer
 import org.apache.lucene.index.IndexWriter
 import org.apache.lucene.index.IndexWriterConfig
 import org.apache.lucene.queryparser.flexible.standard.StandardQueryParser
 import org.apache.lucene.queryparser.flexible.standard.config.StandardQueryConfigHandler
 import org.apache.lucene.store.Directory
 import org.apache.lucene.store.FSDirectory
+import org.codelibs.neologd.ipadic.lucene.analysis.ja.JapaneseAnalyzer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.nio.file.Paths
