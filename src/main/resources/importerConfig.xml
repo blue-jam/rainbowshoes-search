@@ -39,6 +39,10 @@
                  extract="tagName"
                  toField="outOfStock"
             />
+            <dom selector="img#photo"
+                 extract="attr(src)"
+                 toField="product.image"
+             />
         </tagger>
         <!-- コトブキヤオンラインショップ -->
         <filter class="com.norconex.importer.handler.filter.impl.RegexReferenceFilter"
@@ -74,6 +78,10 @@
             <dom selector="#nostock"
                  extract="tagName"
                  toField="outOfStock"
+            />
+            <dom selector="#img_gallery img.hor"
+                 extract="attr(src)"
+                 toField="product.image"
             />
         </tagger>
         <!-- AMNIBUS -->
@@ -111,6 +119,10 @@
                  extract="tagName"
                  toField="outOfStock"
             />
+            <dom selector="#detail-slider img"
+                 extract="attr(src)"
+                 toField="product.image"
+            />
         </tagger>
         <!-- SuperGroupies -->
         <filter class="com.norconex.importer.handler.filter.impl.RegexReferenceFilter"
@@ -146,6 +158,10 @@
             <dom selector=".btAddCart.btDisabled"
                  extract="tagName"
                  toField="outOfStock"
+            />
+            <dom selector=".productImageMain img"
+                 extract="attr(src)"
+                 toField="product.image"
             />
         </tagger>
         <!-- PREMIUM BANDAI -->
@@ -194,6 +210,10 @@
             <dom selector="[alt='予約終了しました']"
                  extract="tagName"
                  toField="reservationClosed"
+            />
+            <dom selector="img#main_image1"
+                 extract="attr(src)"
+                 toField="product.image"
             />
         </tagger>
     </preParseHandlers>
