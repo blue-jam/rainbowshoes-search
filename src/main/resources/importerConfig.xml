@@ -1,6 +1,5 @@
 <importer>
     <preParseHandlers>
-        <transformer class="moe.rainbowshoes.search.crawler.importer.NfkcTransformer"/>
         <!-- アソビストア -->
         <filter class="com.norconex.importer.handler.filter.impl.RegexReferenceFilter"
                 onMatch="exclude">

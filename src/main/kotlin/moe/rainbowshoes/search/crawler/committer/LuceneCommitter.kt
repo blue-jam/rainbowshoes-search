@@ -22,6 +22,7 @@ import org.apache.lucene.index.Term
 import org.apache.lucene.search.TermQuery
 import org.springframework.stereotype.Component
 import java.io.InputStream
+import java.text.Normalizer
 import java.time.Clock
 import javax.annotation.PreDestroy
 
@@ -35,6 +36,10 @@ class LuceneCommitter(
     fun destroy() {
         indexWriter.commit()
         indexWriter.close()
+    }
+
+    fun normalizeText(text: String): String {
+        return Normalizer.normalize(text, Normalizer.Form.NFKC)
     }
 
     override fun add(reference: String?, content: InputStream?, metadata: Properties?) {
@@ -51,12 +56,12 @@ class LuceneCommitter(
 
         val urlField = StringField(URL_FIELD, reference, Field.Store.YES)
         val storeField = StringField(STORE_FIELD, store, Field.Store.YES)
-        val titleField = TextField(TITLE_FIELD, productName, Field.Store.YES)
+        val titleField = TextField(TITLE_FIELD, normalizeText(productName), Field.Store.YES)
         val relatedWorkFields = relatedWorks.map {
-            StringField(RELATED_WORK_FIELD, it, Field.Store.YES)
+            StringField(RELATED_WORK_FIELD, normalizeText(it), Field.Store.YES)
         }
         val statusField = StringField(STATUS_FIELD, status, Field.Store.YES)
-        val contentField = TextField(CONTENT_FIELD, pageContent, Field.Store.YES)
+        val contentField = TextField(CONTENT_FIELD, normalizeText(pageContent), Field.Store.YES)
 
         val urlTerm = Term(URL_FIELD, reference)
 
