@@ -132,7 +132,7 @@ class CrawlerConfig {
         return (serpFrequencies + defaultMinFrequency).toTypedArray()
     }
 
-    @Bean
+    // @Bean
     fun jsonFileCommitter(
         @Value("\${rainbowshoes.crawler.json.docsPerFile:10000}") docsPerFile: Int,
         @Value("\${rainbowshoes.crawler.json.compress:true}") compress: Boolean
