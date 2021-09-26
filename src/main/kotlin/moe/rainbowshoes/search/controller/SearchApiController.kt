@@ -13,6 +13,7 @@ import org.apache.lucene.search.Query
 import org.apache.lucene.search.TermQuery
 import org.apache.lucene.search.TopScoreDocCollector
 import org.springframework.stereotype.Controller
+import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
@@ -31,6 +32,7 @@ class SearchApiController(
         val total: Long
     )
 
+    @CrossOrigin(origins = ["localhost", "rainbowshoes.moe"])
     @GetMapping("/api/search")
     @ResponseBody
     fun search(
