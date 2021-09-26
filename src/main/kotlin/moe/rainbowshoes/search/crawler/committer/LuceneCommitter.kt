@@ -56,7 +56,7 @@ class LuceneCommitter(
             StringField(RELATED_WORK_FIELD, it, Field.Store.YES)
         }
         val statusField = StringField(STATUS_FIELD, status, Field.Store.YES)
-        val contentField = TextField(CONTENT_FIELD, pageContent, Field.Store.NO)
+        val contentField = TextField(CONTENT_FIELD, pageContent, Field.Store.YES)
 
         val urlTerm = Term(URL_FIELD, reference)
 
