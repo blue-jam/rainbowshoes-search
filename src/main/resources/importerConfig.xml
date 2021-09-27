@@ -39,6 +39,10 @@
                  extract="tagName"
                  toField="outOfStock"
             />
+            <dom selector=".imgicon[alt='近日発売']"
+                 extract="tagName"
+                 toField="onSaleSoon"
+            />
             <dom selector="img#photo"
                  extract="attr(src)"
                  toField="product.image"
@@ -220,7 +224,7 @@
     <postParseHandlers>
         <tagger class="com.norconex.importer.handler.tagger.impl.MergeTagger">
             <merge toField="product.content" deleteFromFields="false"
-                   singleValue="true" singleValueSeparator="\n\n">
+                   singleValue="true" singleValueSeparator="&#x0A;&#x0A;">
                 <fromFields>product.name, product.relatedWork, product.description</fromFields>
             </merge>
         </tagger>
@@ -244,6 +248,10 @@
             <replace fromField="reservationClosed" toField="product.status" regex="true" wholeMatch="true">
                 <fromValue>.*</fromValue>
                 <toValue>RESERVATION_CLOSED</toValue>
+            </replace>
+            <replace fromField="onSaleSoon" toField="product.status" regex="true" wholeMatch="true">
+                <fromValue>.*</fromValue>
+                <toValue>ON_SALE_SOON</toValue>
             </replace>
         </tagger>
         <tagger class="com.norconex.importer.handler.tagger.impl.KeepOnlyTagger">
