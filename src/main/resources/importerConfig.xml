@@ -207,7 +207,7 @@
                  extract="tagName"
                  toField="endOfSale"
             />
-            <dom selector="[name='buy'][src$='reserve_item.gif']"
+            <dom selector="[name='buy'][src$='reserve_item.gif'], [name='buy'][src$='reserve_item_noselect.gif']"
                  extract="tagName"
                  toField="acceptingReservation"
             />
