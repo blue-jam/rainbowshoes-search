@@ -10,7 +10,11 @@ import org.apache.lucene.queryparser.flexible.standard.StandardQueryParser
 import org.apache.lucene.search.BooleanClause
 import org.apache.lucene.search.BooleanQuery
 import org.apache.lucene.search.Query
+import org.apache.lucene.search.Sort
+import org.apache.lucene.search.SortField
 import org.apache.lucene.search.TermQuery
+import org.apache.lucene.search.TopDocs
+import org.apache.lucene.search.TopFieldCollector
 import org.apache.lucene.search.TopScoreDocCollector
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.CrossOrigin
@@ -33,6 +37,10 @@ class SearchApiController(
         val total: Long
     )
 
+    enum class SortCriteria {
+        RELEVANCE, CREATED_AT
+    }
+
     @CrossOrigin(origins = ["http://localho.st:8080", "https://rainbowshoes.moe"], methods = [RequestMethod.GET])
     @GetMapping("/api/search")
     @ResponseBody
@@ -40,7 +48,8 @@ class SearchApiController(
         @RequestParam(name = "q") queryString: String,
         @RequestParam(name = "p", defaultValue = "0") page: Int,
         @RequestParam(name = "n", defaultValue = "20") numPerPage: Int,
-        @RequestParam(name = "status", defaultValue = "") statusFilterName: String
+        @RequestParam(name = "status", defaultValue = "") statusFilterName: String,
+        @RequestParam(name = "sort", defaultValue = "") sortCriteriaInString: String
     ): Response {
         val searcher = indexReloader.getCurrentSearcher()
         val userQuery = try {
@@ -57,11 +66,23 @@ class SearchApiController(
             queryBuilder.add(statusFilterQuery, BooleanClause.Occur.FILTER)
         }
 
-        val collector = TopScoreDocCollector.create(numPerPage * (page + 1), 10000)
-
         val query = queryBuilder.build()
-        searcher.search(query, collector)
-        val topDocs = collector.topDocs(page * numPerPage, numPerPage)
+
+        val sortCriteria = try {
+            SortCriteria.valueOf(sortCriteriaInString)
+        } catch (e: IllegalArgumentException) {
+            SortCriteria.RELEVANCE
+        }
+
+        val topDocs: TopDocs = if (sortCriteria == SortCriteria.RELEVANCE) {
+            val collector = buildDefaultCollector(page, numPerPage)
+            searcher.search(query, collector)
+            collector.topDocs(page * numPerPage, numPerPage)
+        } else {
+            val collector = buildSortCollector(sortCriteria, page, numPerPage)
+            searcher.search(query, collector)
+            collector.topDocs(page * numPerPage, numPerPage)
+        }
 
         val products = topDocs.scoreDocs.map { scoreDoc ->
             searcher.doc(scoreDoc.doc)
@@ -98,5 +119,22 @@ class SearchApiController(
                 builder.build()
             }
         }
+    }
+
+    fun buildSortCollector(
+        sortCriteria: SortCriteria,
+        page: Int,
+        numPerPage: Int
+    ): TopFieldCollector {
+        val sortField = SortField(IndexFields.CREATED_AT_FIELD, SortField.Type.LONG, true)
+
+        return TopFieldCollector.create(Sort(sortField), numPerPage * (page + 1), 10000)
+    }
+
+    fun buildDefaultCollector(
+        page: Int,
+        numPerPage: Int
+    ): TopScoreDocCollector {
+        return TopScoreDocCollector.create(numPerPage * (page + 1), 10000)
     }
 }
