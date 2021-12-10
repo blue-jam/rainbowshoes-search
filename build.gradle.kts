@@ -37,6 +37,10 @@ dependencies {
 	}
 	implementation("edu.ucar:jj2000:5.2")
 
+	// Temporary fix for log4j vulnerability https://www.lunasec.io/docs/blog/log4j-zero-day/
+	implementation("org.apache.logging.log4j:log4j-api:2.15.0")
+	implementation("org.apache.logging.log4j:log4j-core:2.15.0")
+
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
