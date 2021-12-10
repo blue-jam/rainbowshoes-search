@@ -22,6 +22,7 @@ repositories {
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web") {
+		exclude("org.apache.logging.log4j", "log4j-to-slf4j")
 		exclude("ch.qos.logback", "logback-classic")
 	}
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
