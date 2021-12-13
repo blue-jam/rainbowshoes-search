@@ -115,7 +115,7 @@ class CrawlerConfig {
     fun minFrequency(
         @Value("\${rainbowshoes.crawler.serp.patterns}") serpPatterns: List<String>,
         @Value("\${rainbowshoes.crawler.serp.frequency:daily}") serpFrequency: String,
-        @Value("\${rainbowshoes.crawler.default.frequency:weekly") defaultFrequency: String
+        @Value("\${rainbowshoes.crawler.default.frequency:weekly}") defaultFrequency: String
     ): Array<GenericRecrawlableResolver.MinFrequency> {
         val serpFrequencies = serpPatterns.map { pattern ->
             val minFrequency = GenericRecrawlableResolver.MinFrequency()
