@@ -22,7 +22,6 @@ repositories {
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web") {
-		exclude("org.apache.logging.log4j", "log4j-to-slf4j")
 		exclude("ch.qos.logback", "logback-classic")
 	}
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -38,13 +37,13 @@ dependencies {
 	}
 	implementation("edu.ucar:jj2000:5.2")
 
-	// Temporary fix for log4j vulnerability https://www.lunasec.io/docs/blog/log4j-zero-day/
-	implementation("org.apache.logging.log4j:log4j-api:2.15.0")
-	implementation("org.apache.logging.log4j:log4j-core:2.15.0")
-
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
+
+// Temporary fix for log4j vulnerability https://spring.io/blog/2021/12/10/log4j2-vulnerability-and-spring-boot
+ext["log4j2.version"] = "2.17.0"
+ext["logback.version"] = "1.2.9"
 
 tasks.withType<KotlinCompile> {
 	kotlinOptions {
