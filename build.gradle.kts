@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "2.5.4"
+	id("org.springframework.boot") version "2.5.12"
 	id("io.spring.dependency-management") version "1.0.11.RELEASE"
 	kotlin("jvm") version "1.5.21"
 	kotlin("plugin.spring") version "1.5.21"
@@ -40,10 +40,6 @@ dependencies {
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
-
-// Temporary fix for log4j vulnerability https://spring.io/blog/2021/12/10/log4j2-vulnerability-and-spring-boot
-ext["log4j2.version"] = "2.17.0"
-ext["logback.version"] = "1.2.9"
 
 tasks.withType<KotlinCompile> {
 	kotlinOptions {
