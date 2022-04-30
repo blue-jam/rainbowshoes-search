@@ -22,19 +22,21 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.io.ResourceLoader
 import java.io.BufferedReader
-import java.io.File
 import java.io.InputStreamReader
 import java.nio.file.Paths
 
 @Configuration
 class CrawlerConfig {
     @Bean
-    fun collectorConfig(httpCrawlerConfig: HttpCrawlerConfig): HttpCollectorConfig {
+    fun collectorConfig(
+        httpCrawlerConfig: HttpCrawlerConfig,
+        @Value("\${rainbowshoes.crawler.directory}") directory: String
+    ): HttpCollectorConfig {
         val collectorConfig = HttpCollectorConfig()
         collectorConfig.id = "RainbowshoesSearchCollector"
-        collectorConfig.logsDir = "/tmp/logs/"
+        collectorConfig.logsDir = Paths.get(directory, "logs").toString()
         collectorConfig.setCrawlerConfigs(httpCrawlerConfig)
-        collectorConfig.progressDir = "build/progress"
+        collectorConfig.progressDir = Paths.get(directory, "progress").toString()
 
         return collectorConfig
     }
@@ -47,7 +49,8 @@ class CrawlerConfig {
         referenceFilters: Array<IReferenceFilter>,
         delayResolver: GenericDelayResolver,
         genericRecrawlableResolver: GenericRecrawlableResolver,
-        importerConfig: ImporterConfig
+        importerConfig: ImporterConfig,
+        @Value("\${rainbowshoes.crawler.directory}") crawlerDir: String
     ): HttpCrawlerConfig {
         val crawlerConfig = HttpCrawlerConfig()
         crawlerConfig.id = "RainbowshoesSearchCrawler"
@@ -56,7 +59,7 @@ class CrawlerConfig {
         crawlerConfig.setReferenceFilters(*referenceFilters)
         crawlerConfig.committer = MultiCommitter(committers.toList())
         crawlerConfig.delayResolver = delayResolver
-        crawlerConfig.workDir = File("build/work")
+        crawlerConfig.workDir = Paths.get(crawlerDir, "work").toFile()
         crawlerConfig.isIgnoreCanonicalLinks = true
         crawlerConfig.recrawlableResolver = genericRecrawlableResolver
         crawlerConfig.sitemapResolverFactory = null

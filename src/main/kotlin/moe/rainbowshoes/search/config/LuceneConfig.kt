@@ -8,6 +8,7 @@ import org.apache.lucene.queryparser.flexible.standard.config.StandardQueryConfi
 import org.apache.lucene.store.Directory
 import org.apache.lucene.store.FSDirectory
 import org.codelibs.neologd.ipadic.lucene.analysis.ja.JapaneseAnalyzer
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.nio.file.Paths
@@ -15,7 +16,8 @@ import java.nio.file.Paths
 @Configuration
 class LuceneConfig {
     @Bean
-    fun directory(): Directory = FSDirectory.open(Paths.get("build", "index"))
+    fun directory(@Value("\${rainbowshoes.lucene.directory}") directory: String): Directory =
+        FSDirectory.open(Paths.get(directory))
 
     @Bean
     fun analyzer(): Analyzer = JapaneseAnalyzer()
