@@ -28,7 +28,7 @@ Search API for rainbowshoes.moe
 
 Then, the search API is available on http://localhost:8080/api/search?q=QUERY .
 
-# Run with docker-compose
+## Run with docker-compose
 
 ```sh
 docker-compose up -d
