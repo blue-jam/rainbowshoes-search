@@ -6,5 +6,6 @@ services:
       - "8080:8080"
     volumes:
       - rsearch:/var/lib/rainbowshoes-search
+    restart: always
 volumes:
   rsearch: {}
