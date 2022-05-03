@@ -1,0 +1,7 @@
+#!/bin/sh
+
+GIT_HOOKS_PATH=.git/hooks
+rm -rf $GIT_HOOKS_PATH
+
+PROJECT_HOOKS_PATH=../hooks
+ln -sf $PROJECT_HOOKS_PATH $GIT_HOOKS_PATH
