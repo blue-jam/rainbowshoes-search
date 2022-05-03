@@ -1,0 +1,10 @@
+version: '3'
+services:
+  search:
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - rsearch:/var/lib/rainbowshoes-search
+volumes:
+  rsearch: {}
