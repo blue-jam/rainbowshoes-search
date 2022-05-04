@@ -1,0 +1,33 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build with Gradle
+        run: ./gradlew check testReport build
+      - name: Archive reports
+        uses: actions/upload-artifact@v2
+        with:
+          name: reports
+          path: build/reports
+        if: ${{ always() }}
+  build-and-scan-container:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - run: docker build . -t rainbowshoes-search:${{ github.sha }}
+      - uses: Azure/container-scan@v0
+        with:
+          image-name: rainbowshoes-search:${{ github.sha }}
