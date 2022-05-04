@@ -30,3 +30,4 @@ jobs:
       - uses: Azure/container-scan@v0
         with:
           image-name: rainbowshoes-search:${{ github.sha }}
+    needs: build-and-test
