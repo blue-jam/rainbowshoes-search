@@ -1,6 +1,10 @@
 package moe.rainbowshoes.search.crawler.committer
 
-import com.norconex.committer.core.ICommitter
+import com.norconex.committer.core3.CommitterContext
+import com.norconex.committer.core3.DeleteRequest
+import com.norconex.committer.core3.ICommitter
+import com.norconex.committer.core3.ICommitterRequest
+import com.norconex.committer.core3.UpsertRequest
 import com.norconex.commons.lang.map.Properties
 import moe.rainbowshoes.search.index.IndexFields.CONTENT_FIELD
 import moe.rainbowshoes.search.index.IndexFields.CREATED_AT_FIELD
@@ -24,7 +28,6 @@ import org.springframework.stereotype.Component
 import java.io.InputStream
 import java.text.Normalizer
 import java.time.Clock
-import javax.annotation.PreDestroy
 
 @Component
 class LuceneCommitter(
@@ -32,17 +35,21 @@ class LuceneCommitter(
     private val indexReloader: IndexReloader,
     private val clock: Clock
 ) : ICommitter {
-    @PreDestroy
-    fun destroy() {
-        indexWriter.commit()
-        indexWriter.close()
-    }
+//    @PreDestroy
+//    fun destroy() {
+//        indexWriter.commit()
+//        indexWriter.close()
+//    }
 
     fun normalizeText(text: String): String {
         return Normalizer.normalize(text, Normalizer.Form.NFKC)
     }
 
-    override fun add(reference: String?, content: InputStream?, metadata: Properties?) {
+    override fun upsert(upsertRequest: UpsertRequest?) {
+        add(upsertRequest?.reference, upsertRequest?.content, upsertRequest?.metadata)
+    }
+
+    fun add(reference: String?, content: InputStream?, metadata: Properties?) {
         if (reference == null || metadata == null) {
             return
         }
@@ -97,12 +104,23 @@ class LuceneCommitter(
         document.add(contentField)
 
         indexWriter.updateDocument(urlTerm, document)
-    }
-
-    override fun remove(reference: String?, metadata: Properties?) {
-    }
-
-    override fun commit() {
         indexWriter.commit()
+    }
+
+    override fun close() {
+        indexWriter.commit()
+    }
+
+    override fun init(committerContext: CommitterContext?) {
+    }
+
+    override fun accept(request: ICommitterRequest?): Boolean {
+        return true
+    }
+
+    override fun delete(deleteRequest: DeleteRequest?) {
+    }
+
+    override fun clean() {
     }
 }

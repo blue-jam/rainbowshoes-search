@@ -23,6 +23,7 @@ repositories {
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web") {
 		exclude("ch.qos.logback", "logback-classic")
+		exclude("org.apache.logging.log4j", "log4j-to-slf4j")
 	}
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -32,9 +33,7 @@ dependencies {
 	implementation("org.apache.lucene:lucene-queryparser:8.2.0")
 	implementation("org.codelibs:lucene-analyzers-kuromoji-ipadic-neologd:8.2.0-20200120")
 
-	implementation("com.norconex.collectors:norconex-collector-http:2.9.0") {
-		exclude("edu.ucar", "jj2000")
-	}
+	implementation("com.norconex.collectors:norconex-collector-http:3.0.0")
 	implementation("edu.ucar:jj2000:5.2")
 
 	developmentOnly("org.springframework.boot:spring-boot-devtools")

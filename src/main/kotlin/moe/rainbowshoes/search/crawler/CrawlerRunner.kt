@@ -12,7 +12,7 @@ class CrawlerRunner(
 //    val jsonFileCommitter: JSONFileCommitter
 ) : ApplicationRunner {
     override fun run(args: ApplicationArguments?) {
-        collector.start(true)
+        collector.start()
     }
 
     @PreDestroy

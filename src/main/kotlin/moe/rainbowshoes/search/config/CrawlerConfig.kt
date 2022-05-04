@@ -4,16 +4,17 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.norconex.collector.core.filter.IReferenceFilter
 import com.norconex.collector.core.filter.impl.ExtensionReferenceFilter
+import com.norconex.collector.core.store.IDataStoreEngine
+import com.norconex.collector.core.store.impl.jdbc.JdbcDataStoreEngine
 import com.norconex.collector.http.HttpCollector
 import com.norconex.collector.http.HttpCollectorConfig
 import com.norconex.collector.http.crawler.HttpCrawlerConfig
-import com.norconex.collector.http.data.store.impl.jdbc.JDBCCrawlDataStoreFactory
 import com.norconex.collector.http.delay.impl.GenericDelayResolver
+import com.norconex.collector.http.link.ILinkExtractor
 import com.norconex.collector.http.recrawl.impl.GenericRecrawlableResolver
-import com.norconex.collector.http.url.ILinkExtractor
-import com.norconex.committer.core.ICommitter
-import com.norconex.committer.core.impl.JSONFileCommitter
-import com.norconex.committer.core.impl.MultiCommitter
+import com.norconex.committer.core3.ICommitter
+import com.norconex.committer.core3.fs.impl.JSONFileCommitter
+import com.norconex.commons.lang.xml.XML
 import com.norconex.importer.ImporterConfig
 import com.norconex.importer.handler.filter.OnMatch
 import moe.rainbowshoes.search.crawler.ConfigurableLinkExtractor
@@ -34,9 +35,8 @@ class CrawlerConfig {
     ): HttpCollectorConfig {
         val collectorConfig = HttpCollectorConfig()
         collectorConfig.id = "RainbowshoesSearchCollector"
-        collectorConfig.logsDir = Paths.get(directory, "logs").toString()
+        collectorConfig.workDir = Paths.get(directory)
         collectorConfig.setCrawlerConfigs(httpCrawlerConfig)
-        collectorConfig.progressDir = Paths.get(directory, "progress").toString()
 
         return collectorConfig
     }
@@ -50,23 +50,33 @@ class CrawlerConfig {
         delayResolver: GenericDelayResolver,
         genericRecrawlableResolver: GenericRecrawlableResolver,
         importerConfig: ImporterConfig,
-        @Value("\${rainbowshoes.crawler.directory}") crawlerDir: String
+        dataStoreEngine: IDataStoreEngine
     ): HttpCrawlerConfig {
         val crawlerConfig = HttpCrawlerConfig()
         crawlerConfig.id = "RainbowshoesSearchCrawler"
         crawlerConfig.setStartURLs(*startUrls)
         crawlerConfig.setLinkExtractors(*linkExtractors)
         crawlerConfig.setReferenceFilters(*referenceFilters)
-        crawlerConfig.committer = MultiCommitter(committers.toList())
+        crawlerConfig.committers = committers.toList()
         crawlerConfig.delayResolver = delayResolver
-        crawlerConfig.workDir = Paths.get(crawlerDir, "work").toFile()
         crawlerConfig.isIgnoreCanonicalLinks = true
         crawlerConfig.recrawlableResolver = genericRecrawlableResolver
-        crawlerConfig.sitemapResolverFactory = null
-        crawlerConfig.crawlDataStoreFactory = JDBCCrawlDataStoreFactory()
+        crawlerConfig.sitemapResolver = null
+        crawlerConfig.dataStoreEngine = dataStoreEngine
         crawlerConfig.importerConfig = importerConfig
 
         return crawlerConfig
+    }
+
+    @Bean
+    fun dataStoreEngine(@Value("\${rainbowshoes.crawler.directory}") crawlerDir: String): JdbcDataStoreEngine {
+        val dbDirectory = Paths.get(crawlerDir, "work", "crawlstore", "jdbc", "h2")
+        val url = "jdbc:h2:${dbDirectory.toAbsolutePath()}"
+
+        val dataStoreEngine = JdbcDataStoreEngine()
+        dataStoreEngine.configProperties.add("jdbcUrl", url)
+
+        return dataStoreEngine
     }
 
     @Bean
@@ -77,7 +87,7 @@ class CrawlerConfig {
 
         val config = ImporterConfig()
         config.loadFromXML(
-            InputStreamReader(fileUrl.openStream())
+            XML(InputStreamReader(fileUrl.openStream()))
         )
 
         return config
@@ -142,7 +152,7 @@ class CrawlerConfig {
     ): JSONFileCommitter {
         val committer = JSONFileCommitter()
 
-        committer.directory = Paths.get("build", "json").toString()
+        committer.directory = Paths.get("build", "json")
         committer.docsPerFile = docsPerFile
         committer.isCompress = compress
 

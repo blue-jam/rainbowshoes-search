@@ -1,18 +1,18 @@
 <importer>
     <preParseHandlers>
         <!-- アソビストア -->
-        <filter class="com.norconex.importer.handler.filter.impl.RegexReferenceFilter"
-                onMatch="exclude">
+        <handler class="com.norconex.importer.handler.filter.impl.RegexReferenceFilter"
+                 onMatch="exclude">
             <regex>\Ahttps:\/\/shop\.asobistore\.jp\/product\/catalog\/.*\z</regex>
-        </filter>
-        <tagger class="com.norconex.importer.handler.tagger.impl.DOMTagger"
-                parser="html"
+        </handler>
+        <handler class="com.norconex.importer.handler.tagger.impl.DOMTagger"
+                 parser="html"
         >
-            <restrictTo
-                    caseSensitive="false"
-                    field="document.reference"
-            >
-                \Ahttps:\/\/shop\.asobistore\.jp\/products\/detail\/.*\z
+            <restrictTo>
+                <fieldMatcher>document.reference</fieldMatcher>
+                <valueMatcher method="regex">
+                    \Ahttps:\/\/shop\.asobistore\.jp\/products\/detail\/.*\z
+                </valueMatcher>
             </restrictTo>
             <dom selector="header img[alt='アソビストア']"
                  extract="attr(alt)"
@@ -46,21 +46,19 @@
             <dom selector="img#photo"
                  extract="attr(src)"
                  toField="product.image"
-             />
-        </tagger>
+            />
+        </handler>
         <!-- コトブキヤオンラインショップ -->
-        <filter class="com.norconex.importer.handler.filter.impl.RegexReferenceFilter"
-                onMatch="exclude">
+        <handler class="com.norconex.importer.handler.filter.impl.RegexReferenceFilter"
+                 onMatch="exclude">
             <regex>\Ahttps:\/\/shop\.kotobukiya\.co\.jp\/shop\/e\/.*\z</regex>
-        </filter>
-        <tagger class="com.norconex.importer.handler.tagger.impl.DOMTagger"
-                parser="html"
+        </handler>
+        <handler class="com.norconex.importer.handler.tagger.impl.DOMTagger"
+                 parser="html"
         >
-            <restrictTo
-                    caseSensitive="false"
-                    field="document.reference"
-            >
-                \Ahttps:\/\/shop\.kotobukiya\.co\.jp\/shop\/g\/.*\z
+            <restrictTo>
+                <fieldMatcher>document.reference</fieldMatcher>
+                <valueMatcher method="regex">\Ahttps:\/\/shop\.kotobukiya\.co\.jp\/shop\/g\/.*\z</valueMatcher>
             </restrictTo>
             <dom selector="#header img[alt='KOTOBUKIYA ONLINE SHOP']"
                  extract="attr(alt)"
@@ -87,20 +85,18 @@
                  extract="attr(src)"
                  toField="product.image"
             />
-        </tagger>
+        </handler>
         <!-- AMNIBUS -->
-        <filter class="com.norconex.importer.handler.filter.impl.RegexReferenceFilter"
-                onMatch="exclude">
+        <handler class="com.norconex.importer.handler.filter.impl.RegexReferenceFilter"
+                 onMatch="exclude">
             <regex>\Ahttps:\/\/amnibus\.com\/products\/list.*\z</regex>
-        </filter>
-        <tagger class="com.norconex.importer.handler.tagger.impl.DOMTagger"
-                parser="html"
+        </handler>
+        <handler class="com.norconex.importer.handler.tagger.impl.DOMTagger"
+                 parser="html"
         >
-            <restrictTo
-                    caseSensitive="false"
-                    field="document.reference"
-            >
-                \Ahttps:\/\/amnibus\.com\/products\/detail\/.*\z
+            <restrictTo>
+                <fieldMatcher>document.reference</fieldMatcher>
+                <valueMatcher method="regex">\Ahttps:\/\/amnibus\.com\/products\/detail\/.*\z</valueMatcher>
             </restrictTo>
             <dom selector="img[alt='AMNIBUS']"
                  extract="attr(alt)"
@@ -127,20 +123,18 @@
                  extract="attr(src)"
                  toField="product.image"
             />
-        </tagger>
+        </handler>
         <!-- SuperGroupies -->
-        <filter class="com.norconex.importer.handler.filter.impl.RegexReferenceFilter"
-                onMatch="exclude">
+        <handler class="com.norconex.importer.handler.filter.impl.RegexReferenceFilter"
+                 onMatch="exclude">
             <regex>\Ahttps:\/\/www\.super-groupies\.com\/search.*\z</regex>
-        </filter>
-        <tagger class="com.norconex.importer.handler.tagger.impl.DOMTagger"
-                parser="html"
+        </handler>
+        <handler class="com.norconex.importer.handler.tagger.impl.DOMTagger"
+                 parser="html"
         >
-            <restrictTo
-                    caseSensitive="false"
-                    field="document.reference"
-            >
-                \Ahttps:\/\/www\.super-groupies\.com\/product\/.*\z
+            <restrictTo>
+                <fieldMatcher>document.reference</fieldMatcher>
+                <valueMatcher method="regex">\Ahttps:\/\/www\.super-groupies\.com\/product\/.*\z</valueMatcher>
             </restrictTo>
             <dom selector="img[alt='SuperGroupies']"
                  extract="attr(alt)"
@@ -167,20 +161,18 @@
                  extract="attr(src)"
                  toField="product.image"
             />
-        </tagger>
+        </handler>
         <!-- PREMIUM BANDAI -->
-        <filter class="com.norconex.importer.handler.filter.impl.RegexReferenceFilter"
-                onMatch="exclude">
+        <handler class="com.norconex.importer.handler.filter.impl.RegexReferenceFilter"
+                 onMatch="exclude">
             <regex>\Ahttps:\/\/p-bandai\.jp\/chara\/.*\z</regex>
-        </filter>
-        <tagger class="com.norconex.importer.handler.tagger.impl.DOMTagger"
-                parser="html"
+        </handler>
+        <handler class="com.norconex.importer.handler.tagger.impl.DOMTagger"
+                 parser="html"
         >
-            <restrictTo
-                    caseSensitive="false"
-                    field="document.reference"
-            >
-                \Ahttps:\/\/p-bandai\.jp\/item\/.*\z
+            <restrictTo>
+                <fieldMatcher>document.reference</fieldMatcher>
+                <valueMatcher method="regex">\Ahttps:\/\/p-bandai\.jp\/item\/.*\z</valueMatcher>
             </restrictTo>
             <dom selector="#pbHeader img[alt='プレミアムバンダイ']"
                  extract="attr(alt)"
@@ -219,47 +211,54 @@
                  extract="attr(src)"
                  toField="product.image"
             />
-        </tagger>
+        </handler>
     </preParseHandlers>
     <postParseHandlers>
-        <tagger class="com.norconex.importer.handler.tagger.impl.MergeTagger">
+        <handler class="com.norconex.importer.handler.tagger.impl.MergeTagger">
             <merge toField="product.content" deleteFromFields="false"
                    singleValue="true" singleValueSeparator="&#x0A;&#x0A;">
-                <fromFields>product.name, product.relatedWork, product.description</fromFields>
+                <fieldMatcher method="csv">product.name,product.relatedWork,product.description</fieldMatcher>
             </merge>
-        </tagger>
-        <tagger class="com.norconex.importer.handler.tagger.impl.ReplaceTagger">
-            <replace fromField="onSale" toField="product.status" regex="true" wholeMatch="true">
-                <fromValue>.*</fromValue>
+        </handler>
+        <handler class="com.norconex.importer.handler.tagger.impl.ReplaceTagger">
+            <replace toField="product.status">
+                <fieldMatcher>onSale</fieldMatcher>
+                <valueMatcher method="regex" partial="false">.*</valueMatcher>
                 <toValue>ON_SALE</toValue>
             </replace>
-            <replace fromField="endOfSale" toField="product.status" regex="true" wholeMatch="true">
-                <fromValue>.*</fromValue>
+            <replace toField="product.status">
+                <fieldMatcher>endOfSale</fieldMatcher>
+                <valueMatcher method="regex" partial="false">.*</valueMatcher>
                 <toValue>END_OF_SALE</toValue>
             </replace>
-            <replace fromField="outOfStock" toField="product.status" regex="true" wholeMatch="true">
-                <fromValue>.*</fromValue>
+            <replace toField="product.status">
+                <fieldMatcher>outOfStock</fieldMatcher>
+                <valueMatcher method="regex" partial="false">.*</valueMatcher>
                 <toValue>OUT_OF_STOCK</toValue>
             </replace>
-            <replace fromField="acceptingReservation" toField="product.status" regex="true" wholeMatch="true">
-                <fromValue>.*</fromValue>
+            <replace toField="product.status">
+                <fieldMatcher>acceptingReservation</fieldMatcher>
+                <valueMatcher method="regex" partial="false">.*</valueMatcher>
                 <toValue>ACCEPTING_RESERVATION</toValue>
             </replace>
-            <replace fromField="reservationClosed" toField="product.status" regex="true" wholeMatch="true">
-                <fromValue>.*</fromValue>
+            <replace toField="product.status">
+                <fieldMatcher>reservationClosed</fieldMatcher>
+                <valueMatcher method="regex" partial="false">.*</valueMatcher>
                 <toValue>RESERVATION_CLOSED</toValue>
             </replace>
-            <replace fromField="onSaleSoon" toField="product.status" regex="true" wholeMatch="true">
-                <fromValue>.*</fromValue>
+            <replace toField="product.status">
+                <fieldMatcher>onSaleSoon</fieldMatcher>
+                <valueMatcher method="regex" partial="false">.*</valueMatcher>
                 <toValue>ON_SALE_SOON</toValue>
             </replace>
-        </tagger>
-        <tagger class="com.norconex.importer.handler.tagger.impl.KeepOnlyTagger">
-            <fields>document.reference</fields>
-            <fieldsRegex>product\..*</fieldsRegex>
-        </tagger>
-        <transformer class="com.norconex.importer.handler.transformer.impl.SubstringTransformer"
-                     begin="0"
-                     end="1"/>
+        </handler>
+        <handler class="com.norconex.importer.handler.tagger.impl.KeepOnlyTagger">
+            <fieldMatcher method="regex">
+                (document\.reference|product\..*)
+            </fieldMatcher>
+        </handler>
+        <handler class="com.norconex.importer.handler.transformer.impl.SubstringTransformer"
+                 begin="0"
+                 end="1"/>
     </postParseHandlers>
 </importer>
