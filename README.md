@@ -1,14 +1,22 @@
-# rainbowshoes-search
+# Rainbow Shoes Search API
 Search API for rainbowshoes.moe
 
-# Develop
+## Run with docker-compose
+
+```sh
+docker-compose up -d
+```
+
+Then, the search API is available on http://localhost:8080/api/search?q=QUERY .
+
+## Development
 
 1. Add Git hooks
     ```sh
     ./init.sh
     ```
 
-## Run with Gradle
+### Run with Gradle
 1. Create directory for a crawler and a search index. Choose one from the below.
    1. Create directory in `/var/lib`
       ```sh
@@ -25,11 +33,3 @@ Search API for rainbowshoes.moe
    ```sh
    ./gradlew bootRun
    ```
-
-Then, the search API is available on http://localhost:8080/api/search?q=QUERY .
-
-## Run with docker-compose
-
-```sh
-docker-compose up -d
-```
