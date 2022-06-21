@@ -35,12 +35,6 @@ class LuceneCommitter(
     private val indexReloader: IndexReloader,
     private val clock: Clock
 ) : ICommitter {
-//    @PreDestroy
-//    fun destroy() {
-//        indexWriter.commit()
-//        indexWriter.close()
-//    }
-
     fun normalizeText(text: String): String {
         return Normalizer.normalize(text, Normalizer.Form.NFKC)
     }
@@ -109,6 +103,7 @@ class LuceneCommitter(
 
     override fun close() {
         indexWriter.commit()
+        indexWriter.close()
     }
 
     override fun init(committerContext: CommitterContext?) {
