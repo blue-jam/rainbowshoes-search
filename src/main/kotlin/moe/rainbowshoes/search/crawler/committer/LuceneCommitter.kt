@@ -8,6 +8,7 @@ import com.norconex.committer.core3.UpsertRequest
 import com.norconex.commons.lang.map.Properties
 import moe.rainbowshoes.search.index.IndexFields.CONTENT_FIELD
 import moe.rainbowshoes.search.index.IndexFields.CREATED_AT_FIELD
+import moe.rainbowshoes.search.index.IndexFields.CREATED_AT_POINT_FIELD
 import moe.rainbowshoes.search.index.IndexFields.CREATED_AT_STORED_FIELD
 import moe.rainbowshoes.search.index.IndexFields.RELATED_WORK_FIELD
 import moe.rainbowshoes.search.index.IndexFields.STATUS_FIELD
@@ -17,6 +18,7 @@ import moe.rainbowshoes.search.index.IndexFields.URL_FIELD
 import moe.rainbowshoes.search.index.IndexReloader
 import org.apache.lucene.document.Document
 import org.apache.lucene.document.Field
+import org.apache.lucene.document.LongPoint
 import org.apache.lucene.document.NumericDocValuesField
 import org.apache.lucene.document.StoredField
 import org.apache.lucene.document.StringField
@@ -70,11 +72,11 @@ class LuceneCommitter(
         val hits = indexSearcher.search(TermQuery(urlTerm), 1).scoreDocs
 
         val document: Document
+        val currentTimeMillis = clock.millis()
         if (hits.isEmpty()) {
             document = Document()
             document.add(urlField)
 
-            val currentTimeMillis = clock.millis()
             document.add(
                 NumericDocValuesField(CREATED_AT_FIELD, currentTimeMillis)
             )
@@ -88,6 +90,7 @@ class LuceneCommitter(
             document.removeFields(RELATED_WORK_FIELD)
             document.removeField(STATUS_FIELD)
             document.removeField(CONTENT_FIELD)
+            document.removeField(CREATED_AT_POINT_FIELD)
         }
         document.add(storeField)
         document.add(titleField)
@@ -96,6 +99,9 @@ class LuceneCommitter(
         }
         document.add(statusField)
         document.add(contentField)
+        document.add(
+            LongPoint(CREATED_AT_POINT_FIELD, currentTimeMillis)
+        )
 
         indexWriter.updateDocument(urlTerm, document)
         indexWriter.commit()

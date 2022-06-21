@@ -1,8 +1,10 @@
 package moe.rainbowshoes.search.controller
 
 import moe.rainbowshoes.search.index.IndexFields
+import moe.rainbowshoes.search.index.IndexFields.CREATED_AT_FIELD
 import moe.rainbowshoes.search.index.IndexReloader
 import moe.rainbowshoes.search.model.Product
+import org.apache.lucene.document.NumericDocValuesField
 import org.apache.lucene.index.Term
 import org.apache.lucene.queryparser.classic.QueryParser
 import org.apache.lucene.queryparser.flexible.core.QueryNodeException
@@ -22,6 +24,9 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
+import java.time.DateTimeException
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 @Controller
 class SearchApiController(
@@ -49,9 +54,16 @@ class SearchApiController(
         @RequestParam(name = "p", defaultValue = "0") page: Int,
         @RequestParam(name = "n", defaultValue = "20") numPerPage: Int,
         @RequestParam(name = "status", defaultValue = "") statusFilterName: String,
-        @RequestParam(name = "sort", defaultValue = "") sortCriteriaInString: String
+        @RequestParam(name = "sort", defaultValue = "") sortCriteriaInString: String,
+        @RequestParam(name = "since", defaultValue = "") fromDateTimeString: String
     ): Response {
-        val searcher = indexReloader.getCurrentSearcher()
+        val fromTime = try {
+            ZonedDateTime.from(DateTimeFormatter.ISO_DATE_TIME.parse(fromDateTimeString))
+                .toInstant()
+        } catch (e: DateTimeException) {
+            null
+        }
+
         val userQuery = try {
             queryParser.parse(queryString, IndexFields.CONTENT_FIELD)
         } catch (e: QueryNodeException) {
@@ -66,6 +78,10 @@ class SearchApiController(
             queryBuilder.add(statusFilterQuery, BooleanClause.Occur.FILTER)
         }
 
+        fromTime?.run {
+            queryBuilder.add(buildTimeRangeFilter(fromTime.toEpochMilli()), BooleanClause.Occur.FILTER)
+        }
+
         val query = queryBuilder.build()
 
         val sortCriteria = try {
@@ -74,6 +90,7 @@ class SearchApiController(
             SortCriteria.RELEVANCE
         }
 
+        val searcher = indexReloader.getCurrentSearcher()
         val topDocs: TopDocs = if (sortCriteria == SortCriteria.RELEVANCE) {
             val collector = buildDefaultCollector(page, numPerPage)
             searcher.search(query, collector)
@@ -121,12 +138,16 @@ class SearchApiController(
         }
     }
 
+    fun buildTimeRangeFilter(
+        fromTimeMillis: Long
+    ): Query = NumericDocValuesField.newSlowRangeQuery(CREATED_AT_FIELD, fromTimeMillis, Long.MAX_VALUE)
+
     fun buildSortCollector(
         sortCriteria: SortCriteria,
         page: Int,
         numPerPage: Int
     ): TopFieldCollector {
-        val sortField = SortField(IndexFields.CREATED_AT_FIELD, SortField.Type.LONG, true)
+        val sortField = SortField(CREATED_AT_FIELD, SortField.Type.LONG, true)
 
         return TopFieldCollector.create(Sort(sortField), numPerPage * (page + 1), 10000)
     }

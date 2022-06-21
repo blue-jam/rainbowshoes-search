@@ -9,4 +9,5 @@ object IndexFields {
     const val CONTENT_FIELD = "content"
     const val CREATED_AT_FIELD = "createdAt"
     const val CREATED_AT_STORED_FIELD = "createdAtStored"
+    const val CREATED_AT_POINT_FIELD = "createdAtPoint"
 }
